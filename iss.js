@@ -31,4 +31,27 @@ const fetchMyIP = function(callback) {
   });
 };
 
-module.exports = { fetchMyIP };
+const fetchCoordsByIP = function(ip, callback) {
+
+  request(`https://api.freegeoip.app/json/${ip}?apikey=c89cd880-53ba-11ec-b678-f1a2d8c46ee9`, (error, response, body) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+
+    if (response.statusCode !== 200) {
+      const msg = `Status Code ${response.statusCode} when fetching geo location. Response: ${body}`;
+      callback(Error(msg), null);
+      return
+    }
+
+    const data = JSON.parse(body);
+
+
+    callback(error, data);
+  });
+
+};
+
+
+module.exports = { fetchMyIP, fetchCoordsByIP };
